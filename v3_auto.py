@@ -15,8 +15,8 @@ def butler_batch_sort():
     current_dir = Path(".")
     count = 0   # 这是“这一轮”的小计，每次进函数都会清零
     for item in current_dir.iterdir():
-        # 排除文件夹和脚本自己
-        if item.is_file() and item.name != "v3_auto.py":
+        # 排除文件夹和脚本自己和生成的日志文件
+        if item.is_file() and item.name != "v3_auto.py" and item.name != "butler_log.txt":
             ext = item.suffix.lower().replace(".", "") or "others"
             target_folder = current_dir / ext
             target_folder.mkdir(exist_ok=True)
@@ -39,4 +39,11 @@ if __name__ == "__main__":
             time.sleep(10)       # 2. 闭眼休眠 10 秒
     except KeyboardInterrupt:
         now = datetime.now().strftime("%H:%M:%S")
-        print(f"\n{now}👋 管家下班了，总计搬运：{total_files_moved} 个文件,期待下次为您服务！")
+        # 👈 把 \n 挪到最后，这样每条记录后面都会自动准备好下一行
+        summary = f"[{now}] 👋 管家下班了，总计搬运：{total_files_moved} 个文件\n"
+
+        with open("butler_log.txt", "a", encoding="utf-8") as f:
+            f.write(summary)
+            
+        # 这里的 print 可以保留 \n 让控制台好看一点
+        print(f"\n{summary}期待下次为您服务！")
