@@ -38,4 +38,5 @@ if __name__ == "__main__":
             butler_batch_sort()  # 1. 执行扫除
             time.sleep(10)       # 2. 闭眼休眠 10 秒
     except KeyboardInterrupt:
-        print(f"\n👋 管家下班了，总计搬运：{total_files_moved} 个文件,期待下次为您服务！")
+        now = datetime.now().strftime("%H:%M:%S")
+        print(f"\n{now}👋 管家下班了，总计搬运：{total_files_moved} 个文件,期待下次为您服务！")
