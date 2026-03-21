@@ -1,8 +1,11 @@
 # 自动定时
+from datetime import datetime  # 从时间库里拿出现在的时间工具
 import time             # 导入时间工具 (闹钟)
 from pathlib import Path    # 拿取智能路径工具
 import shutil               # 拿取物理搬运工具
 
+now = datetime.now().strftime("%H:%M:%S") # 👈 这一行是“看表”并把时间变成人类能看懂的格式
+print(f"[{now}] 🤵 管家正在穿衣服，准备开工...")
 # --- 1. 统计一共移动了多少个文件,在函数外面 ---
 total_files_moved = 0
 def butler_batch_sort():
