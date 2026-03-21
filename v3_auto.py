@@ -1,0 +1,38 @@
+# 自动定时
+import time             # 导入时间工具 (闹钟)
+from pathlib import Path    # 拿取智能路径工具
+import shutil               # 拿取物理搬运工具
+
+# --- 1. 统计一共移动了多少个文件,在函数外面 ---
+total_files_moved = 0
+def butler_batch_sort():
+    """这是刚才写好的批量处理逻辑"""
+    # 声明我们要用外面那个total_files_moved变量
+    global total_files_moved
+    current_dir = Path(".")
+    count = 0   # 这是“这一轮”的小计，每次进函数都会清零
+    for item in current_dir.iterdir():
+        # 排除文件夹和脚本自己
+        if item.is_file() and item.name != "v3_auto.py":
+            ext = item.suffix.lower().replace(".", "") or "others"
+            target_folder = current_dir / ext
+            target_folder.mkdir(exist_ok=True)
+            shutil.move(str(item), str(target_folder / item.name))
+            count += 1  # 本轮加 1
+            total_files_moved += 1  # 总数加 1 
+    
+    if count > 0:
+        print(f"🤵 管家报告：刚才自动清理了 {count} 个新文件！")
+        print(f"🏆 累计功劳：已经帮您处理了 {total_files_moved} 个文件！")
+
+# --- 启动开关 (定时自动化) ---
+if __name__ == "__main__":
+    print("🚀 自动管家已上线，每 10 秒扫描一次文件夹...")
+    print("⚠️  提示：按键盘上的 Ctrl + C 可以解雇管家（停止运行）。")
+    
+    try:
+        while True:
+            butler_batch_sort()  # 1. 执行扫除
+            time.sleep(10)       # 2. 闭眼休眠 10 秒
+    except KeyboardInterrupt:
+        print(f"\n👋 管家下班了，总计搬运：{total_files_moved} 个文件,期待下次为您服务！")
