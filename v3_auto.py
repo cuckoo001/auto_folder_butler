@@ -87,7 +87,13 @@ def butler_core_logic():
                     name_lower = item_path.name.lower()
                     
                     # 排除逻辑：如果是程序自己、日志文件、图标、或者其他的 exe，就不动它们
-                    if (name_lower == my_name.lower() or 
+                    # --- 改进后的排除逻辑 ---
+                    # 1. 获取当前运行脚本的文件名
+                    current_script = Path(sys.argv[0]).name.lower()
+                    
+                    # 2. 增加硬编码排除（防止它搬走源代码）
+                    if (name_lower == current_script or 
+                        name_lower == "v3_auto.py" or  # 👈 显式排除源码
                         name_lower == LOG_NAME.lower() or 
                         name_lower == "butler.ico" or 
                         name_lower == "butler.png" or 
